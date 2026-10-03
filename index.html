@@ -6,8 +6,24 @@
   <title>Nebula ADS Pages — Landing pages que convierten</title>
   <!-- Meta descripción para SEO -->
   <meta name="description" content="Creamos landing pages profesionales para pequeñas y medianas empresas. Diseño responsive, sin mantenimiento y enfocadas a conversión (WhatsApp o formulario).">
-  <!-- Estilos e íconos: Font Awesome para íconos sutiles en morado -->
+
+  <!-- Fuentes: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MYQ4L9PH32"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-MYQ4L9PH32');
+  </script>
+
   <style>
     /* ----- RESET Y VARIABLES ----- */
     * {
@@ -36,9 +52,6 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
     }
-
-    /* Importar fuente Inter opcional (mejora estética) */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap');
 
     .container {
       max-width: 1200px;
@@ -583,7 +596,11 @@
         <i class="fas fa-cloud"></i> Nebula <span>ADS</span> Pages
       </div>
       <!-- Botón de contacto directo en header (opcional) -->
-      <a href="https://nebula.dnrconsultor.com/p/contacto.html" class="btn btn-outline" style="padding: 10px 24px; font-size: 0.95rem;">
+      <a href="https://nebula.dnrconsultor.com/p/contacto.html"
+         class="btn btn-outline"
+         data-cta="header-contacto"
+         data-location="header"
+         style="padding: 10px 24px; font-size: 0.95rem;">
         <i class="fas fa-paper-plane"></i> Contacto
       </a>
     </div>
@@ -600,7 +617,10 @@
         Enfocadas 100% en conversión: WhatsApp o formulario de suscripción, sin mantenimiento y con diseño responsive.
       </p>
       <div class="hero-cta">
-        <a href="https://nebula.dnrconsultor.com/p/contacto.html" class="btn">
+        <a href="https://nebula.dnrconsultor.com/p/contacto.html"
+           class="btn"
+           data-cta="whatsapp-hero"
+           data-location="hero">
           <i class="fab fa-whatsapp"></i> Quiero mi landing ahora
         </a>
         <a href="#beneficios" class="btn btn-outline">
@@ -732,7 +752,11 @@
         <i class="fas fa-chart-line"></i>
         <h3>+40% de conversión</h3>
         <p>Nuestras landings están optimizadas para que cada visita tenga una intención clara: contactarte.</p>
-        <a href="https://nebula.dnrconsultor.com/p/contacto.html" class="btn" style="width: 100%;">
+        <a href="https://nebula.dnrconsultor.com/p/contacto.html"
+           class="btn"
+           data-cta="whatsapp-conversion"
+           data-location="conversion"
+           style="width: 100%;">
           <i class="fab fa-whatsapp"></i> Solicitar por WhatsApp
         </a>
       </div>
@@ -802,7 +826,10 @@
     <div class="container">
       <h2>¿Listo para tener una landing que trabaje por ti?</h2>
       <p>Cuéntanos sobre tu pyme y te ayudamos a crear una página enfocada en resultados.</p>
-      <a href="https://nebula.dnrconsultor.com/p/contacto.html" class="btn">
+      <a href="https://nebula.dnrconsultor.com/p/contacto.html"
+         class="btn"
+         data-cta="contacto-final"
+         data-location="final-cta">
         <i class="fas fa-paper-plane"></i> Ir a contacto
       </a>
     </div>
@@ -822,7 +849,7 @@
     </div>
   </footer>
 
-  <!-- JAVASCRIPT: animaciones al hacer scroll y pequeños detalles -->
+  <!-- JAVASCRIPT: animaciones al hacer scroll y tracking de CTAs -->
   <script>
     (function() {
       // Animación fade-up al hacer scroll (Intersection Observer)
@@ -833,19 +860,18 @@
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('visible');
-              // Opcional: dejar de observar después de que se hace visible
               observer.unobserve(entry.target);
             }
           });
         }, {
-          threshold: 0.15,  // Se activa cuando el 15% del elemento es visible
+          threshold: 0.15,
           rootMargin: '0px 0px -30px 0px'
         });
 
         fadeElements.forEach(el => observer.observe(el));
       }
 
-      // Pequeña mejora: suavizar scroll para anclas internas
+      // Suavizar scroll para anclas internas
       document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
           const href = this.getAttribute('href');
@@ -854,6 +880,19 @@
           if (target) {
             e.preventDefault();
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      // Tracking de CTAs (evento generate_lead en GA4)
+      document.querySelectorAll('[data-cta]').forEach(function(el) {
+        el.addEventListener('click', function() {
+          if (typeof gtag === 'function') {
+            gtag('event', 'generate_lead', {
+              event_category: 'engagement',
+              event_label: el.dataset.cta,
+              cta_location: el.dataset.location || 'unknown'
+            });
           }
         });
       });
